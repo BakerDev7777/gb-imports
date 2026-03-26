@@ -18,7 +18,7 @@ body.light {
   --tx:#1a1d2e; --tx2:#4a4f6a; --tx3:#9098b8;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{font-size:16px;}
+html{font-size:17px;}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;}
 
 /* ── LOADING ── */
@@ -365,14 +365,58 @@ td.pz{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--tx3
 .errmsg{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);color:var(--red);border-radius:9px;padding:9px 13px;font-size:.75rem;margin-bottom:13px;display:none;}
 .errmsg.on{display:block;}
 
+/* ── DASHBOARD ── */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+.dk{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:16px 15px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s;cursor:default;}
+.dk:hover{transform:translateY(-2px);}
+.dk::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.dk.da::before{background:var(--acc);} .dk.db::before{background:var(--grn);} .dk.dc::before{background:var(--red);} .dk.dd::before{background:var(--yel);}
+.dk-icon{font-size:18px;margin-bottom:8px;}
+.dk-val{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-1px;line-height:1;margin-bottom:4px;}
+.dk.da .dk-val{color:var(--acc);} .dk.db .dk-val{color:var(--grn);} .dk.dc .dk-val{color:var(--red);} .dk.dd .dk-val{color:var(--yel);}
+.dk-lbl{font-size:.65rem;color:var(--tx3);text-transform:uppercase;letter-spacing:.7px;}
+.dk-sub{font-size:.72rem;color:var(--tx2);margin-top:5px;}
+.dash-section{margin-bottom:20px;}
+.dash-sh{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.82rem;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.dash-recentes{display:flex;flex-direction:column;gap:8px;}
+.dr-item{background:var(--surf);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .15s;}
+.dr-item:hover{border-color:rgba(91,127,255,.35);}
+.dr-num{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.72rem;color:var(--tx3);min-width:22px;}
+.dr-info{flex:1;min-width:0;}
+.dr-prod{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.86rem;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dr-cli{font-size:.73rem;color:var(--tx2);margin-top:1px;}
+.dr-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.dr-val{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.86rem;color:var(--grn);white-space:nowrap;}
+.dr-dt{font-size:.67rem;color:var(--tx3);}
+.dash-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.dash-card{background:var(--surf);border:1px solid var(--brd);border-radius:12px;padding:16px;}
+.dc-h{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.84rem;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.dc-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--brd);font-size:.8rem;}
+.dc-row:last-child{border-bottom:none;}
+.dc-name{color:var(--tx);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;}
+.dc-val{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;white-space:nowrap;}
+/* ── ALERTA TRAVADAS ── */
+#alertaTravadas{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.35);border-radius:10px;padding:12px 16px;margin-bottom:18px;display:none;cursor:pointer;transition:background .15s;}
+#alertaTravadas:hover{background:rgba(255,107,107,.15);}
+#alertaTravadas.on{display:flex;}
+.alerta-inner{display:flex;align-items:flex-start;gap:11px;width:100%;}
+.alerta-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.alerta-body{flex:1;}
+.alerta-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.85rem;color:var(--red);margin-bottom:4px;}
+.alerta-list{display:flex;flex-direction:column;gap:3px;}
+.alerta-enc{font-size:.76rem;color:var(--tx2);}
+.alerta-enc strong{color:var(--tx);}
+.alerta-enc span{color:var(--red);font-size:.7rem;}
+.alerta-close{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:16px;flex-shrink:0;padding:2px;transition:color .15s;}
+.alerta-close:hover{color:var(--red);}
 /* ── TOAST ── */
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:9px 17px;font-size:.77rem;color:var(--tx);z-index:500;box-shadow:0 8px 22px rgba(0,0,0,.4);opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
 .toast.on{transform:translateX(-50%) translateY(0);opacity:1;}
 
 /* ── RESPONSIVE ── */
-@media(max-width:1023px){.spl{display:none;}.hnav{display:none;}.hbg{display:flex;}.l2col{grid-template-columns:1fr;}.sidegrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}}
+@media(max-width:1023px){.spl{display:none;}.hnav{display:none;}.hbg{display:flex;}.l2col{grid-template-columns:1fr;}.sidegrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;}.dash-2col{grid-template-columns:1fr;}.dash-grid{grid-template-columns:repeat(2,1fr);}}
 @media(min-width:1024px){.hbg{display:none;}.mmenu{display:none!important;}.hdr{padding:0 26px;}.main{padding:26px 22px;}.mdl{border-radius:20px;max-width:560px;}.ov{align-items:center;padding:20px;}@keyframes mup{from{opacity:0;transform:translateY(12px) scale(.97);}to{opacity:1;transform:none;}}}
-@media(max-width:599px){:root{--hh:56px;}.ptitle{font-size:1.4rem;}.btnadd{padding:9px 13px;font-size:.8rem;}.sumrow{grid-template-columns:repeat(3,1fr);gap:7px;}.kstrip{grid-template-columns:repeat(3,1fr);}.snum{font-size:1.28rem;}.twrap{display:none;}.clist{display:flex;}.fcard .tscrl{display:none;}.fclist{display:flex;padding:11px;}.fgrid{grid-template-columns:1fr;}.fgrid .full{grid-column:1;}.macts{flex-direction:column;}.bcancel{order:2;}.bsave{order:1;}.cgrid{grid-template-columns:1fr;}.sidegrid{grid-template-columns:1fr!important;}}
+@media(max-width:599px){:root{--hh:56px;}.ptitle{font-size:1.4rem;}.btnadd{padding:9px 13px;font-size:.8rem;}.sumrow{grid-template-columns:repeat(3,1fr);gap:7px;}.kstrip{grid-template-columns:repeat(3,1fr);}.snum{font-size:1.28rem;}.twrap{display:none;}.clist{display:flex;}.fcard .tscrl{display:none;}.fclist{display:flex;padding:11px;}.fgrid{grid-template-columns:1fr;}.fgrid .full{grid-column:1;}.macts{flex-direction:column;}.bcancel{order:2;}.bsave{order:1;}.cgrid{grid-template-columns:1fr;}.sidegrid{grid-template-columns:1fr!important;}.dash-grid{grid-template-columns:repeat(2,1fr);}.dash-2col{grid-template-columns:1fr;}}
 @media(max-width:380px){.sumrow{grid-template-columns:repeat(2,1fr);}.scard:last-child{grid-column:span 2;}.kstrip{grid-template-columns:repeat(2,1fr);}.kpi:nth-child(5){grid-column:span 2;}}
 </style>
 </head>
@@ -426,7 +470,8 @@ td.pz{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--tx3
       <span class="hlogo-tx">GB IMPORTS</span>
     </div>
     <nav class="hnav">
-      <button class="nl on" id="navEnc" onclick="goPage('enc')">📦 Encomendas</button>
+      <button class="nl on" id="navDash" onclick="goPage('dash')">🏠 Dashboard</button>
+      <button class="nl" id="navEnc" onclick="goPage('enc')">📦 Encomendas</button>
       <button class="nl" id="navFin" onclick="goPage('fin')">💰 Financeiro</button>
       <button class="nl" id="navCli" onclick="goPage('cli')">👥 Clientes</button>
     </nav>
@@ -444,7 +489,8 @@ td.pz{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--tx3
   </header>
 
   <div class="mmenu" id="mmenu">
-    <button class="nl on" onclick="goPage('enc');toggleMenu()">📦 Encomendas</button>
+    <button class="nl on" onclick="goPage('dash');toggleMenu()">🏠 Dashboard</button>
+    <button class="nl" onclick="goPage('enc');toggleMenu()">📦 Encomendas</button>
     <button class="nl" onclick="goPage('fin');toggleMenu()">💰 Financeiro</button>
     <button class="nl" onclick="goPage('cli');toggleMenu()">👥 Clientes</button>
     <div class="mstats">
@@ -453,8 +499,83 @@ td.pz{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--tx3
     </div>
   </div>
 
+  <!-- PAGE: DASHBOARD -->
+  <div id="pgDash" class="pg on">
+    <div class="main">
+      <!-- ALERTA ENCOMENDAS TRAVADAS -->
+      <div id="alertaTravadas">
+        <div class="alerta-inner">
+          <div class="alerta-icon">⚠️</div>
+          <div class="alerta-body">
+            <div class="alerta-title">Encomendas paradas há mais de 10 dias</div>
+            <div class="alerta-list" id="alertaList"></div>
+          </div>
+          <button class="alerta-close" onclick="$('alertaTravadas').classList.remove('on')" title="Fechar">✕</button>
+        </div>
+      </div>
+
+      <div class="ph">
+        <div>
+          <div class="ptitle" id="dashGreeting">Bom dia 👋</div>
+          <div class="psub" id="dashDate"></div>
+        </div>
+        <button class="btnadd" onclick="goPage('enc');openEModal()">＋ Nova Encomenda</button>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="dash-grid">
+        <div class="dk da">
+          <div class="dk-icon">📦</div>
+          <div class="dk-val" id="dkPendentes">0</div>
+          <div class="dk-lbl">Pendentes</div>
+          <div class="dk-sub" id="dkPendSub">aguardando + comprado</div>
+        </div>
+        <div class="dk db" style="cursor:pointer" onclick="goPage('fin')">
+          <div class="dk-icon">💰</div>
+          <div class="dk-val" id="dkMes">R$ 0</div>
+          <div class="dk-lbl">Receita do Mês</div>
+          <div class="dk-sub" id="dkMesSub"></div>
+        </div>
+        <div class="dk dc" style="cursor:pointer" onclick="goPage('cli')">
+          <div class="dk-icon">💸</div>
+          <div class="dk-val" id="dkDevendo">0</div>
+          <div class="dk-lbl">Clientes com Débito</div>
+          <div class="dk-sub" id="dkDevendoSub"></div>
+        </div>
+        <div class="dk dd">
+          <div class="dk-icon">🚚</div>
+          <div class="dk-val" id="dkTransito">0</div>
+          <div class="dk-lbl">Em Trânsito</div>
+          <div class="dk-sub">status enviado</div>
+        </div>
+      </div>
+
+      <!-- ÚLTIMAS ENCOMENDAS + RESUMO -->
+      <div class="dash-2col">
+        <div class="dash-section">
+          <div class="dash-sh">📋 Últimas 5 Encomendas</div>
+          <div class="dash-recentes" id="dashRecentes"></div>
+        </div>
+        <div>
+          <div class="dash-section">
+            <div class="dash-sh">💸 Clientes que Devem</div>
+            <div class="dash-card" style="padding:8px 14px">
+              <div id="dashDevendo"></div>
+            </div>
+          </div>
+          <div class="dash-section">
+            <div class="dash-sh">📊 Status Hoje</div>
+            <div class="dash-card" style="padding:8px 14px">
+              <div id="dashStatus"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- PAGE: ENCOMENDAS -->
-  <div id="pgEnc" class="pg on">
+  <div id="pgEnc" class="pg">
     <div class="main">
       <div id="ebErr" class="errbar"></div>
       <div class="ph">
@@ -749,10 +870,13 @@ const openOv = id => { $(id).classList.add('op'); document.body.style.overflow='
 
 /* ─── NAVIGATION ─── */
 window.goPage = function(p) {
-  ['enc','fin','cli'].forEach(x => {
-    $('pg'+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle('on', x===p);
-    $('nav'+x.charAt(0).toUpperCase()+x.slice(1)).classList.toggle('on', x===p);
+  ['dash','enc','fin','cli'].forEach(x => {
+    const pg = $('pg'+x.charAt(0).toUpperCase()+x.slice(1));
+    const nav = $('nav'+x.charAt(0).toUpperCase()+x.slice(1));
+    if(pg) pg.classList.toggle('on', x===p);
+    if(nav) nav.classList.toggle('on', x===p);
   });
+  if(p==='dash') dashInit();
   if(p==='enc') eInit();
   if(p==='fin') fInit();
   if(p==='cli') cInit();
@@ -791,8 +915,137 @@ function showApp() {
   $('appLoad').classList.add('gone');
   const user = localStorage.getItem('gbimports_user') || '';
   if(user) $('outBtn').innerHTML = `👤 ${H(user)} · 🚪 Sair`;
-  goPage('enc');
+  goPage('dash');
 }
+
+/* ════════════════════════════════════
+   DASHBOARD
+   ════════════════════════════════════ */
+let DALL=[], DNOTAS=[], dReady=false, dChan=null;
+
+async function dashInit(){
+  // Atualizar saudação e data
+  const hr=new Date().getHours();
+  const greet = hr<12?'Bom dia 👋':hr<18?'Boa tarde 👋':'Boa noite 👋';
+  $('dashGreeting').textContent = greet;
+  $('dashDate').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+  if(!dReady){
+    dReady = true;
+    await dLoad();
+    dChan = DB.channel('d-rt')
+      .on('postgres_changes',{event:'*',schema:'public',table:'encomendas'}, dLoad)
+      .subscribe();
+  } else {
+    dRender();
+  }
+}
+
+async function dLoad(){
+  const {data,error} = await DB.from('encomendas').select('*').order('criado_em',{ascending:false});
+  if(error) return;
+  DALL = data||[];
+  dRender();
+}
+
+function dRender(){
+  const agora = new Date();
+  const mes = agora.getMonth(), ano = agora.getFullYear();
+
+  // KPIs
+  const pendentes = DALL.filter(e=>e.status_envio==='aguardando'||e.status_envio==='comprado');
+  const transito  = DALL.filter(e=>e.status_envio==='enviado');
+  $('dkPendentes').textContent = pendentes.length;
+  $('dkPendSub').textContent   = `${DALL.filter(e=>e.status_envio==='aguardando').length} aguardando · ${DALL.filter(e=>e.status_envio==='comprado').length} comprado`;
+  $('dkTransito').textContent  = transito.length;
+
+  // Receita do mês
+  const doMes = DALL.filter(e=>{
+    if(!e.data_pedido) return false;
+    const d=new Date(e.data_pedido+'T00:00:00');
+    return d.getMonth()===mes && d.getFullYear()===ano;
+  });
+  const recMes = doMes.reduce((s,e)=>s+Number(e.valor||0),0);
+  $('dkMes').textContent   = BRL(recMes);
+  $('dkMesSub').textContent= `${doMes.length} pedido${doMes.length!==1?'s':''} este mês`;
+
+  // Clientes devendo
+  const mapa={};
+  DALL.forEach(e=>{ if(!mapa[e.cliente])mapa[e.cliente]=0; if(e.status_pag!=='pago')mapa[e.cliente]+=Number(e.valor||0); });
+  const devendo=Object.entries(mapa).filter(([,v])=>v>0);
+  $('dkDevendo').textContent  = devendo.length;
+  $('dkDevendoSub').textContent= devendo.length>0?`${BRL(devendo.reduce((s,[,v])=>s+v,0))} total`:'Todos em dia ✅';
+
+  // Últimas 5
+  const recentes=DALL.slice(0,5);
+  $('dashRecentes').innerHTML = recentes.length===0
+    ? '<div style="color:var(--tx3);font-size:.8rem;padding:16px 0">Nenhuma encomenda ainda.</div>'
+    : recentes.map((e,i)=>`
+      <div class="dr-item" onclick="goPage('enc')">
+        <div class="dr-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="dr-info">
+          <div class="dr-prod">${H(e.produto)}</div>
+          <div class="dr-cli">${H(e.cliente)} · ${bEstatus(e.status_envio)} ${bPgto(e.status_pag)}</div>
+        </div>
+        <div class="dr-right">
+          <div class="dr-val">${e.valor>0?BRL(Number(e.valor)):'—'}</div>
+          <div class="dr-dt">${fD(e.data_pedido)}</div>
+        </div>
+      </div>`).join('');
+
+  // Clientes devendo lista
+  const topDev=devendo.sort((a,b)=>b[1]-a[1]).slice(0,5);
+  $('dashDevendo').innerHTML = topDev.length===0
+    ? '<div style="color:var(--tx3);font-size:.78rem;padding:8px 0">Nenhum cliente com débito ✅</div>'
+    : topDev.map(([nm,val])=>`
+      <div class="dc-row">
+        <div class="dc-name">${H(nm)}</div>
+        <div class="dc-val" style="color:var(--red)">${BRL(val)}</div>
+      </div>`).join('');
+
+  // Status geral
+  const stats=[
+    {l:'⏳ Aguardando', v:DALL.filter(e=>e.status_envio==='aguardando').length, c:'var(--yel)'},
+    {l:'🛒 Comprado',   v:DALL.filter(e=>e.status_envio==='comprado').length,   c:'var(--pur)'},
+    {l:'🚚 Enviado',    v:DALL.filter(e=>e.status_envio==='enviado').length,     c:'var(--acc)'},
+    {l:'✅ Entregue',   v:DALL.filter(e=>e.status_envio==='entregue').length,    c:'var(--grn)'},
+  ];
+  $('dashStatus').innerHTML = stats.map(s=>`
+    <div class="dc-row">
+      <div class="dc-name">${s.l}</div>
+      <div class="dc-val" style="color:${s.c}">${s.v}</div>
+    </div>`).join('');
+
+  // ── ALERTA ENCOMENDAS TRAVADAS ──
+  const DIAS = 10;
+  const limite = new Date(agora.getTime() - DIAS*24*60*60*1000);
+  const travadas = DALL.filter(e=>{
+    if(e.status_envio !== 'enviado') return false;
+    // Usar data do pedido ou criado_em como referência
+    const ref = e.data_pedido ? new Date(e.data_pedido+'T00:00:00') : new Date(e.criado_em);
+    return ref < limite;
+  });
+
+  if(travadas.length>0){
+    $('alertaList').innerHTML = travadas.slice(0,4).map(e=>{
+      const ref = e.data_pedido ? new Date(e.data_pedido+'T00:00:00') : new Date(e.criado_em);
+      const dias = Math.floor((agora-ref)/(1000*60*60*24));
+      return`<div class="alerta-enc"><strong>${H(e.produto)}</strong> · ${H(e.cliente)} <span>(há ${dias} dias)</span></div>`;
+    }).join('');
+    if(travadas.length>4){
+      $('alertaList').innerHTML += `<div class="alerta-enc" style="color:var(--tx3)">... e mais ${travadas.length-4} encomenda${travadas.length-4>1?'s':''}</div>`;
+    }
+    $('alertaTravadas').classList.add('on');
+  } else {
+    $('alertaTravadas').classList.remove('on');
+  }
+
+  // Sincronizar ENC se já carregado
+  if(eReady){ ENC=DALL; NOTAS=NOTAS; eRender(); eSum(); }
+}
+
+function bEstatus(s){const m={aguardando:'⏳',comprado:'🛒',enviado:'🚚',entregue:'✅'};return m[s]||s;}
+function bPgto(s){if(s==='pago')return'✅';if(s==='parcial')return'⚠️';return'❌';}
 
 window.doLogin = async function() {
   const username = $('fU').value.trim();

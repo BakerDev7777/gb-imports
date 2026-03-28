@@ -409,6 +409,19 @@ td.pz{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--tx3
 .alerta-enc span{color:var(--red);font-size:.7rem;}
 .alerta-close{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:16px;flex-shrink:0;padding:2px;transition:color .15s;}
 .alerta-close:hover{color:var(--red);}
+/* ── CUSTO DÓLAR ── */
+.moeda-tabs{display:flex;gap:5px;margin-bottom:10px;}
+.mtab{background:var(--surf2);border:1px solid var(--brd);border-radius:7px;padding:6px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.74rem;cursor:pointer;transition:all .15s;color:var(--tx2);}
+.mtab.on{background:var(--acc);border-color:var(--acc);color:#fff;}
+.mtab.usd.on{background:#22c55e;border-color:#22c55e;}
+.cotacao-box{background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:10px 13px;margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.cotacao-info{flex:1;min-width:120px;}
+.cotacao-rate{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:.95rem;color:#22c55e;}
+.cotacao-src{font-size:.65rem;color:var(--tx3);margin-top:2px;}
+.cotacao-resultado{text-align:right;}
+.cotacao-brl{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.05rem;color:var(--grn);}
+.cotacao-brl-lbl{font-size:.65rem;color:var(--tx3);}
+.cotacao-loading{font-size:.76rem;color:var(--tx3);font-style:italic;}
 /* ── TOAST ── */
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:9px 17px;font-size:.77rem;color:var(--tx);z-index:500;box-shadow:0 8px 22px rgba(0,0,0,.4);opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
 .toast.on{transform:translateX(-50%) translateY(0);opacity:1;}
@@ -712,8 +725,29 @@ td.pz{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--tx3
       <div class="fld full"><label>Produto</label><input type="text" id="fEProd" placeholder="Ex: Camiseta M"></div>
       <div class="fld"><label>Cliente</label><input type="text" id="fECli" placeholder="Ex: João Silva"></div>
       <div class="fld"><label>Telefone</label><input type="tel" id="fETel" placeholder="11999990000"></div>
-      <div class="fld"><label>Valor (R$)</label><input type="number" id="fEVal" placeholder="0.00" step="0.01" min="0"></div>
+      <div class="fld"><label>Valor Cobrado (R$)</label><input type="number" id="fEVal" placeholder="0.00" step="0.01" min="0"></div>
       <div class="fld"><label>Data</label><input type="date" id="fEDt"></div>
+      <div class="fld full">
+        <label>Custo do Produto (opcional)</label>
+        <div class="moeda-tabs">
+          <button type="button" class="mtab on" id="tabBRL" onclick="setMoeda('BRL')">🇧🇷 R$ Real</button>
+          <button type="button" class="mtab usd" id="tabUSD" onclick="setMoeda('USD')">🇺🇸 $ Dólar</button>
+        </div>
+        <div style="position:relative;">
+          <span id="moedaSymbol" style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:.82rem;color:var(--tx3);pointer-events:none;">R$</span>
+          <input type="number" id="fECusto" placeholder="0.00" step="0.01" min="0" oninput="calcCustoUSD()" style="width:100%;background:var(--bg);border:1px solid var(--brd);border-radius:8px;padding:10px 11px 10px 36px;color:var(--tx);font-family:'Nunito',sans-serif;font-size:.8rem;outline:none;transition:border-color .2s;-webkit-appearance:none;">
+        </div>
+        <div id="cotacaoBox" class="cotacao-box" style="display:none">
+          <div class="cotacao-info">
+            <div class="cotacao-rate" id="cotacaoRate">🔄 Buscando cotação...</div>
+            <div class="cotacao-src" id="cotacaoSrc">comprasparaguai.com.br · AwesomeAPI</div>
+          </div>
+          <div class="cotacao-resultado">
+            <div class="cotacao-brl" id="cotacaoBRL">—</div>
+            <div class="cotacao-brl-lbl">em Reais (R$)</div>
+          </div>
+        </div>
+      </div>
       <div class="fld"><label>Status Envio</label>
         <select id="fEEnvio">
           <option value="aguardando">⏳ Aguardando</option>
@@ -1199,6 +1233,8 @@ window.eSort = f=>{ if(eSortF===f)eSortD*=-1; else{eSortF=f;eSortD=1;} document.
 
 window.openEModal = function(id=null) {
   eEditId=id; openOv('ovEnc');
+  setMoeda('BRL'); // sempre começa em Real
+  $('fECusto').value=''; $('cotacaoBox').style.display='none';
   if(id!==null){
     const e=ENC.find(x=>x.id===id);
     $('eMTitle').textContent='✏️ Editar Encomenda';
@@ -1215,23 +1251,122 @@ window.openEModal = function(id=null) {
   }
 };
 
+/* ── COTAÇÃO DÓLAR ── */
+let moedaAtual = 'BRL';
+let cotacaoDolar = null;
+let cotacaoTs = 0;
+
+window.setMoeda = async function(m) {
+  moedaAtual = m;
+  $('tabBRL').classList.toggle('on', m==='BRL');
+  $('tabUSD').classList.toggle('on', m==='USD');
+  $('moedaSymbol').textContent = m==='USD' ? 'US$' : 'R$';
+  $('fECusto').placeholder = m==='USD' ? '0.00 (dólar)' : '0.00';
+
+  if(m==='USD') {
+    $('cotacaoBox').style.display='flex';
+    $('cotacaoRate').textContent='🔄 Buscando cotação...';
+    $('cotacaoBRL').textContent='—';
+    await buscarCotacao();
+    calcCustoUSD();
+  } else {
+    $('cotacaoBox').style.display='none';
+  }
+};
+
+async function buscarCotacao() {
+  const agora = Date.now();
+  // Cache de 5 minutos
+  if(cotacaoDolar && (agora - cotacaoTs) < 5*60*1000) return;
+
+  try {
+    const r = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL', {signal: AbortSignal.timeout(8000)});
+    const d = await r.json();
+    const taxa = parseFloat(d.USDBRL.ask); // preço de venda (você compra dólar por esse valor)
+    cotacaoDolar = taxa;
+    cotacaoTs = agora;
+    const hora = new Date(parseInt(d.USDBRL.timestamp)*1000).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    $('cotacaoRate').textContent = `1 USD = R$ ${taxa.toFixed(4)}`;
+    $('cotacaoSrc').textContent = `AwesomeAPI · atualizado ${hora}`;
+  } catch(e) {
+    // Fallback: tenta AwesomeAPI via outro endpoint
+    try {
+      const r2 = await fetch('https://economia.awesomeapi.com.br/USD-BRL/1');
+      const d2 = await r2.json();
+      const taxa = parseFloat(d2[0].ask);
+      cotacaoDolar = taxa;
+      cotacaoTs = agora;
+      $('cotacaoRate').textContent = `1 USD = R$ ${taxa.toFixed(4)}`;
+      $('cotacaoSrc').textContent = `AwesomeAPI · estimativa`;
+    } catch(e2) {
+      $('cotacaoRate').textContent = '⚠️ Cotação indisponível';
+      $('cotacaoSrc').textContent = 'Insira o valor em reais manualmente';
+    }
+  }
+}
+
+window.calcCustoUSD = function() {
+  if(moedaAtual !== 'USD') return;
+  const usd = parseFloat($('fECusto').value) || 0;
+  if(!cotacaoDolar || usd === 0) { $('cotacaoBRL').textContent='—'; return; }
+  const brl = usd * cotacaoDolar;
+  $('cotacaoBRL').textContent = BRL(brl);
+};
+
+function getCustoEmReal() {
+  const v = parseFloat($('fECusto').value) || 0;
+  if(v === 0) return null;
+  if(moedaAtual === 'USD' && cotacaoDolar) {
+    return { brl: v * cotacaoDolar, usd: v, cotacao: cotacaoDolar };
+  }
+  return { brl: v, usd: null, cotacao: null };
+}
+
 window.eSave = async function() {
   const prod=$('fEProd').value.trim(), cli=$('fECli').value.trim();
   if(!prod||!cli){showToast('⚠️ Preencha produto e cliente!');return;}
   const btn=$('bESave'); btn.disabled=true; btn.textContent='Salvando...';
+
+  // Custo do produto (pode ser em dólar convertido)
+  const custoInfo = getCustoEmReal();
+  let obsExtra = $('fEObs').value.trim();
+  if(custoInfo?.usd) {
+    const notaCusto = `Custo: US$ ${custoInfo.usd.toFixed(2)} × R$ ${custoInfo.cotacao.toFixed(4)} = ${BRL(custoInfo.brl)}`;
+    obsExtra = obsExtra ? obsExtra + ' | ' + notaCusto : notaCusto;
+  }
+
   const p={produto:prod,cliente:cli,telefone:$('fETel').value.trim()||null,valor:parseFloat($('fEVal').value)||0,
     data_pedido:$('fEDt').value||null,status_envio:$('fEEnvio').value,status_pag:$('fEPag').value,
-    transportadora:$('fETrans').value,rastreio:$('fERast').value.trim()||null,obs:$('fEObs').value.trim()||null};
-  let error;
+    transportadora:$('fETrans').value,rastreio:$('fERast').value.trim()||null,obs:obsExtra||null};
+  let error, newId=null;
   if(eEditId!==null){
     const old=ENC.find(e=>e.id===eEditId);
     const campos=['produto','cliente','telefone','valor','status_envio','status_pag','rastreio','obs','data_pedido'];
     const m=campos.filter(c=>String(old[c]??'')!==String(p[c]??'')).map(c=>({encomenda_id:eEditId,campo:c,valor_antes:String(old[c]??''),valor_depois:String(p[c]??'')}));
     if(m.length>0) await DB.from('historico').insert(m);
     ({error}=await DB.from('encomendas').update(p).eq('id',eEditId));
+    newId=eEditId;
   } else {
-    ({error}=await DB.from('encomendas').insert([p]));
+    const {data:ins,error:e2}=await DB.from('encomendas').insert([p]).select('id').single();
+    error=e2; if(ins) newId=ins.id;
   }
+
+  // Salvar custo no financeiro automaticamente se informado
+  if(!error && custoInfo && newId) {
+    const custoBRL = custoInfo.brl;
+    const finExist = await DB.from('financeiro').select('id').eq('encomenda_id',newId).maybeSingle();
+    const finPayload = {
+      encomenda_id: newId,
+      custo_produto: custoBRL,
+      valor_cobrado: parseFloat($('fEVal').value)||0,
+    };
+    if(finExist.data) {
+      await DB.from('financeiro').update({custo_produto:custoBRL}).eq('id',finExist.data.id);
+    } else {
+      await DB.from('financeiro').insert([finPayload]);
+    }
+  }
+
   btn.disabled=false; btn.textContent='Salvar';
   if(error){showToast('❌ Erro: '+error.message);return;}
   showToast(eEditId?'✅ Atualizada!':'🎉 Adicionada!');

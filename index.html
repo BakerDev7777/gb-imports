@@ -48,6 +48,9 @@ body.light .brand{background:linear-gradient(135deg,#1a1d2e,#4a6ef5);-webkit-bac
 .lfw input{width:100%;background:var(--bg);border:1px solid var(--brd);border-radius:9px;padding:12px 42px 12px 13px;color:var(--tx);font-family:'Nunito',sans-serif;font-size:.92rem;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
 .lfw input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(91,127,255,.1);}
 .lfw input::placeholder{color:var(--tx3);}
+.lfw input:-webkit-autofill,
+.lfw input:-webkit-autofill:hover,
+.lfw input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px var(--bg) inset!important;-webkit-text-fill-color:var(--tx)!important;caret-color:var(--tx);border-color:var(--brd);}
 .eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;padding:4px;color:var(--tx3);}
 .lerr{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);color:var(--red);border-radius:9px;padding:10px 13px;font-size:.82rem;margin-bottom:12px;display:none;text-align:center;}
 .lerr.on{display:block;animation:shk .35s ease;}
@@ -448,7 +451,7 @@ td.pz{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--tx3
 <div id="pgLogin" class="pg">
   <div class="lw">
     <div class="logo-area">
-      <div class="logo-big">🌐</div>
+      <div class="logo-big"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='white' d='M 0 25 C 7 27 11 32 9 39 C 19 36 30 39 32 48 C 34 39 45 36 55 39 C 53 32 57 27 64 25 L 42 25 C 41 30 38 31 34.5 31 L 34.498047 30.972656 A 2.5 3 0 0 0 34.429688 30.292969 L 34 26 L 32.898438 28.203125 A 2.5 3 0 0 0 32 28 A 2.5 3 0 0 0 31.101562 28.205078 L 30 26 L 29.566406 30.330078 A 2.5 3 0 0 0 29.503906 30.964844 L 29.5 31 C 26 31 23 30 22 25 L 0 25 z'/%3E%3C/svg%3E" style="width:100%;height:100%;object-fit:contain;padding:4px" alt="GB"></div>
       <div class="brand">GB IMPORTS</div>
       <div class="brand-sub">Sistema de Gerenciamento</div>
     </div>
@@ -457,7 +460,9 @@ td.pz{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--tx3
       <div class="lerr" id="lerr"></div>
       <div class="lf">
         <label>Usuário</label>
-        <input type="text" id="fU" placeholder="Seu usuário" autocomplete="username" spellcheck="false">
+        <div class="lfw">
+          <input type="text" id="fU" placeholder="Seu usuário" autocomplete="username" spellcheck="false">
+        </div>
       </div>
       <div class="lf">
         <label>Senha</label>
@@ -479,7 +484,7 @@ td.pz{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--tx3
 
   <header class="hdr">
     <div class="hlogo" onclick="goPage('enc')">
-      <div class="hlogo-ic">🌐</div>
+      <div class="hlogo-ic"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='white' d='M 0 25 C 7 27 11 32 9 39 C 19 36 30 39 32 48 C 34 39 45 36 55 39 C 53 32 57 27 64 25 L 42 25 C 41 30 38 31 34.5 31 L 34.498047 30.972656 A 2.5 3 0 0 0 34.429688 30.292969 L 34 26 L 32.898438 28.203125 A 2.5 3 0 0 0 32 28 A 2.5 3 0 0 0 31.101562 28.205078 L 30 26 L 29.566406 30.330078 A 2.5 3 0 0 0 29.503906 30.964844 L 29.5 31 C 26 31 23 30 22 25 L 0 25 z'/%3E%3C/svg%3E" style="width:100%;height:100%;object-fit:contain;padding:4px" alt="GB"></div>
       <span class="hlogo-tx">GB IMPORTS</span>
     </div>
     <nav class="hnav">
